@@ -8,6 +8,8 @@ export const PublicPage = () => {
     const [materia, setMateria] = useState('Matemáticas');
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('');
+    const recompensaValue = 1000; // Valor fijo de la recompensa en CLP
+
 
     const handleChangeContent = (content) => {
         setContent(content);
@@ -26,7 +28,7 @@ export const PublicPage = () => {
         setMetodo(e.target.value);
     };
 
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -36,7 +38,7 @@ export const PublicPage = () => {
             duda: content,
             materia: materia,
             metodo: metodo,
-            recompensa: document.getElementById('coins').value // Obtener valor del campo de recompensa
+            recompensa: recompensaValue // Obtener valor del campo de recompensa
         };
 
         // Convertir objeto a JSON
@@ -49,10 +51,12 @@ export const PublicPage = () => {
     };
 
     return (
-        <div className='container-fluid p-0'>
+        <div className='container-fluid p-0' style={{"background":"#CCCCCC", "minHeight":"100vh"}}>
+            <div className="row col-md-12 bg-white m-0">
 
-            <div className="image-container m-0 p-0">
+            <div className="image-container m-0 p-0 ">
                 <img className='' src={horizontalLogo} alt="" />
+            </div>
             </div>
 
             <div className='card card-responsive p-4 mt-2 col-md-10 mx-auto'>
@@ -125,7 +129,13 @@ export const PublicPage = () => {
 
                     <div className="mb-3">
                         <label htmlFor="coins" className="form-label">Recompensa:</label>
-                        <input id="coins" min={0} type="number" className="form-control" defaultValue={0} />
+                        <input
+                            id="coins"
+                            type="text"
+                            className="form-control"
+                            value={recompensaValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
+                            readOnly
+                        />
                     </div>
 
                     <button type="submit" className="btn btn-primary">Publicar</button>
