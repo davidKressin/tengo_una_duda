@@ -1,15 +1,19 @@
+// PublicPage.js
+
 import React, { useState } from 'react';
+import { ref, set, push } from "firebase/database";
+import { database as db } from '../firebaseConfig'; // Ajusta la ruta según donde tengas tu firebaseConfig.js
 import horizontalLogo from "../assets/horizontalLogo.png";
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // import styles
+import 'react-quill/dist/quill.snow.css'; // importar estilos
 
 export const PublicPage = () => {
     const [content, setContent] = useState('');
     const [materia, setMateria] = useState('Matemáticas');
+    const [email, setEmail] = useState('');
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('');
     const recompensaValue = 1000; // Valor fijo de la recompensa en CLP
-
 
     const handleChangeContent = (content) => {
         setContent(content);
@@ -18,45 +22,51 @@ export const PublicPage = () => {
     const handleChangeMateria = (e) => {
         setMateria(e.target.value);
     };
+    const handleChangeEmail = (e) => {
+        setEmail(e.target.value);
+    };
 
     const handleChangeTitulo = (e) => {
         setTitulo(e.target.value);
     };
 
-
     const handleChangeMetodo = (e) => {
         setMetodo(e.target.value);
     };
 
+    function writeDudaData(titulo, duda, email, materia, metodo, recompensa) {
+        const newDudaRef = push(ref(db, 'dudas')); // Genera un nuevo ID automáticamente
 
+        set(
+            newDudaRef, {
+                titulo,
+                duda,
+                email,
+                materia, 
+                metodo, 
+                recompensa
+            }
+        );
+
+    }   
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Crear objeto JSON con los datos del formulario
-        const formData = {
-            titulo: titulo,
-            duda: content,
-            materia: materia,
-            metodo: metodo,
-            recompensa: recompensaValue // Obtener valor del campo de recompensa
-        };
-
-        // Convertir objeto a JSON
-        const formDataJSON = JSON.stringify(formData);
-
-        // Guardar el JSON (aquí puedes enviarlo a un servidor, almacenarlo en localStorage, etc.)
-        console.log(formDataJSON); // Mostrar en consola para demostración
-
-        // Aquí podrías enviar formDataJSON a un servidor usando fetch o axios, por ejemplo
+        writeDudaData(
+            titulo,
+            content,
+            email,
+            materia,
+            metodo,
+            recompensaValue);
     };
 
     return (
-        <div className='container-fluid p-0' style={{"background":"#CCCCCC", "minHeight":"100vh"}}>
+        <div className='container-fluid p-0' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
             <div className="row col-md-12 bg-white m-0">
-
-            <div className="image-container m-0 p-0 ">
-                <img className='' src={horizontalLogo} alt="" />
-            </div>
+                <div className="image-container m-0 p-0 ">
+                    <img src={horizontalLogo} alt="" />
+                </div>
             </div>
 
             <div className='card card-responsive p-4 mt-2 col-md-10 mx-auto'>
@@ -74,6 +84,18 @@ export const PublicPage = () => {
                             placeholder="Ingresa el título de tu duda"
                             value={titulo}
                             onChange={handleChangeTitulo}
+                        />
+                    </div>
+                    
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">email</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="email"
+                            placeholder="Ingresa tu email"
+                            value={email}
+                            onChange={handleChangeEmail}
                         />
                     </div>
 
@@ -99,7 +121,6 @@ export const PublicPage = () => {
 
                     <div className="mb-3">
                         <p>Método</p>
-
                         <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
                             <input
                                 type="radio"
@@ -123,7 +144,6 @@ export const PublicPage = () => {
                                 autoComplete="off"
                             />
                             <label className="btn btn-outline-primary" htmlFor="btnradio2">Escrito</label>
-
                         </div>
                     </div>
 
