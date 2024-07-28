@@ -7,14 +7,21 @@ import horizontalLogo from "../assets/horizontalLogo.png";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // importar estilos
 import { formValidation } from '../utils/formValidation'; // Ajusta la ruta según donde tengas tu formValidation.js
+import ModalComponent from '../components/ModalComponent';
 
 export const PublicPage = () => {
+    const [paid, setPaid] = useState(false);
     const [content, setContent] = useState('');
     const [materia, setMateria] = useState('Matemáticas');
     const [email, setEmail] = useState('');
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('');
     const [errors, setErrors] = useState({});
+
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
 
     const recompensaValue = 1000; // Valor fijo de la recompensa en CLP
 
@@ -77,24 +84,41 @@ export const PublicPage = () => {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
+        // Enlace al que quieres redirigir
+        const redirectUrl = 'https://www.webpay.cl/form-pay/197168?utm_source=transbank&utm_medium=portal3.0&utm_campaign=link_portal';
+    
         if (validateForm()) {
-            writeDudaData(
+
+            // Escribir en firebase
+            await writeDudaData(
                 titulo,
                 content,
                 email,
                 materia,
                 metodo,
-                recompensaValue
+                recompensaValue,
+                paid
             );
+
+            // abrir modal 
+            handleShow();
+
+    
+            // Redirigir a la nueva URL
+            // window.location.href = redirectUrl;
         }
+    
         console.log(errors);
     };
+    
 
     return (
         <div className='container-fluid p-0' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
+            <ModalComponent show={showModal} handleClose={handleClose} />
+
             <div className="row col-md-12 bg-white m-0">
                 <div className="image-container m-0 p-0 ">
                     <img src={horizontalLogo} alt="" />
@@ -197,7 +221,6 @@ export const PublicPage = () => {
                     </div>
 
                     <button type="submit" className="btn btn-primary">Publicar</button>
-                    <form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>
                 </form>
             </div>
         </div>
