@@ -6,6 +6,7 @@ import { database as db } from '../firebaseConfig'; // Ajusta la ruta según don
 import horizontalLogo from "../assets/horizontalLogo.png";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // importar estilos
+import { formValidation } from '../utils/formValidation'; // Ajusta la ruta según donde tengas tu formValidation.js
 
 export const PublicPage = () => {
     const [content, setContent] = useState('');
@@ -13,6 +14,8 @@ export const PublicPage = () => {
     const [email, setEmail] = useState('');
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('');
+    const [errors, setErrors] = useState({});
+
     const recompensaValue = 1000; // Valor fijo de la recompensa en CLP
 
     const handleChangeContent = (content) => {
@@ -48,17 +51,46 @@ export const PublicPage = () => {
             }
         );
 
-    }   
+    }
+
+    const validateForm = () => {
+        let tempErrors = {};
+        let isValid = true;
+
+        if (!formValidation('text', titulo)) {
+            tempErrors.titulo = '* El título es requerido';
+            isValid = false;
+        }
+
+        if (!formValidation('email', email)) {
+            tempErrors.email = '* El email no es válido';
+            isValid = false;
+        }
+
+        if (!formValidation('text', content)) {
+            tempErrors.content = '* El contenido de la duda es requerido';
+            isValid = false;
+        }
+
+        setErrors(tempErrors);
+        return isValid;
+    };
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        writeDudaData(
-            titulo,
-            content,
-            email,
-            materia,
-            metodo,
-            recompensaValue);
+        if (validateForm()) {
+            writeDudaData(
+                titulo,
+                content,
+                email,
+                materia,
+                metodo,
+                recompensaValue
+            );
+        }
+        console.log(errors);
     };
 
     return (
@@ -75,8 +107,14 @@ export const PublicPage = () => {
                 </div>
 
                 <form onSubmit={handleSubmit}>
+                    <div className="">
+                        {!!errors && <p>{errors.email}</p>} 
+                        {!!errors && <p>{errors.titulo}</p>} 
+                        {!!errors && <p>{errors.content}</p>} 
+                        
+                    </div>
                     <div className="mb-3">
-                        <label htmlFor="titulo" className="form-label">Título</label>
+                        <label htmlFor="titulo" className={`form-label ${errors.titulo && "text-danger fw-bolder"}`}>Título</label>
                         <input
                             type="text"
                             className="form-control"
@@ -88,7 +126,7 @@ export const PublicPage = () => {
                     </div>
                     
                     <div className="mb-3">
-                        <label htmlFor="email" className="form-label">email</label>
+                        <label htmlFor="email" className={`form-label ${errors.email && "text-danger fw-bolder"}`}>email</label>
                         <input
                             type="text"
                             className="form-control"
@@ -100,7 +138,7 @@ export const PublicPage = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="duda" className="form-label">Duda</label>
+                        <label htmlFor="duda"  className={`form-label ${errors.content && "text-danger fw-bolder"}`}>Duda</label>
                         <ReactQuill value={content} onChange={handleChangeContent} />
                     </div>
 
@@ -159,6 +197,7 @@ export const PublicPage = () => {
                     </div>
 
                     <button type="submit" className="btn btn-primary">Publicar</button>
+                    <form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>
                 </form>
             </div>
         </div>
