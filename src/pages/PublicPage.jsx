@@ -15,6 +15,8 @@ export const PublicPage = () => {
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('');
     const [errors, setErrors] = useState({});
+    const [publiced, setpubliced] = useState(false);
+
 
     const recompensaValue = 1000; // Valor fijo de la recompensa en CLP
 
@@ -37,10 +39,10 @@ export const PublicPage = () => {
         setMetodo(e.target.value);
     };
 
-    function writeDudaData(titulo, duda, email, materia, metodo, recompensa) {
+    const writeDudaData = async(titulo, duda, email, materia, metodo, recompensa) =>{
         const newDudaRef = push(ref(db, 'dudas')); // Genera un nuevo ID automáticamente
 
-        set(
+        await set(
             newDudaRef, {
                 titulo,
                 duda,
@@ -50,6 +52,8 @@ export const PublicPage = () => {
                 recompensa
             }
         );
+
+        setpubliced(true);
 
     }
 
@@ -196,8 +200,12 @@ export const PublicPage = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Publicar</button>
-                    <form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>
+                    {
+                        publiced 
+                        ? (<form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>)
+                        : (<button type="submit" className="btn btn-primary">Publicar</button>)
+                        
+                    }
                 </form>
             </div>
         </div>
