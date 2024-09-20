@@ -99,15 +99,9 @@ export const PublicPage = () => {
 
     return (
         <div className='container-fluid p-0' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
-            <div className="row col-md-12 bg-white m-0">
-                <div className="image-container m-0 p-0 ">
-                    <img src={horizontalLogo} alt="" />
-                </div>
-            </div>
-
-            <div className='card card-responsive p-4 mt-2 col-md-10 mx-auto'>
+            <div className='card card-responsive p-4 col-md-10 mx-auto'>
                 <div className="text-center mb-4">
-                    <h4 className="fs-1 font-bold">Publicar Duda</h4>
+                    <h1 className="font-bold">Publicar Duda</h1>
                 </div>
 
                 <form onSubmit={handleSubmit}>

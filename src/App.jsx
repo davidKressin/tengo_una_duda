@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-// import './App.css'
-import { PublicPage } from './pages/PublicPage'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter } from 'react-router-dom';
+import { PublicRoutes } from './routes/PublicRoutes';
+import { AppLayout } from './layouts/AppLayout';
 
 function App() {
-
   return (
-      <PublicPage/>
+    <PublicRoutes />
   )
 }
 
