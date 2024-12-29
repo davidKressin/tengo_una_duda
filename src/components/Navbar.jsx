@@ -5,7 +5,7 @@ import horizontalLogo from "../assets/horizontalLogo.png";
 export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/home">
+      <Link className="navbar-brand" to="/">
         <div className="image-container m-0 p-0 ">
           <img src={horizontalLogo} alt="" />
         </div>
@@ -27,7 +27,7 @@ export const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Publicar</Link>
+              <Link className="nav-link" to="public">Publicar</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="about">Qué es</Link>

@@ -8,8 +8,8 @@ import { HomePage } from '../pages/HomePage';
 export const PublicRoutes = () => {
   return (
     <Routes>
-      <Route path="*" exact element={<PublicPage/>} />
-      <Route path="home" exact element={<HomePage/>} />
+      <Route path="*" exact element={<HomePage/>} />
+      <Route path="public" element={<PublicPage/>} />
       <Route path="about" element={<About/>} />
     </Routes>
   );
