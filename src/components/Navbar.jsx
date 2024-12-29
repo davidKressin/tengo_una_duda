@@ -5,7 +5,7 @@ import horizontalLogo from "../assets/horizontalLogo.png";
 export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">
+      <Link className="navbar-brand" to="/home">
         <div className="image-container m-0 p-0 ">
           <img src={horizontalLogo} alt="" />
         </div>
