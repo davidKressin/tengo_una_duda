@@ -27,10 +27,10 @@ export const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="public">Publicar</Link>
+              <Link className="nav-link" to="home">Inicio</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="about">Qué es</Link>
+              <Link className="nav-link" to="public">Publicar</Link>
             </li>
           </ul>
         </div>

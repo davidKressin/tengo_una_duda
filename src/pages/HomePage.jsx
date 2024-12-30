@@ -12,7 +12,7 @@ export const HomePage = () => {
         justifyContent: "center",
     };
     return (
-        <div className="container-fluid">
+        <div className="container-fluid p-0">
             {/* Hero Section */}
             <header className="text-center py-5 
        rounded" style={gradientBackground}>
