@@ -18,9 +18,9 @@ export const HomePage = () => {
        rounded" style={gradientBackground}>
                 <h1 className="display-4 fs-2 mb-2">¿Tienes dudas? ¡Aquí tienes las respuestas para la PAES!</h1>
                 <p className="lead mb-4">Resuelve tus preguntas de manera rápida y prepara tu futuro con confianza.</p>
-                <div className="d-flex col-12 flex-row justify-content-center">
-                    <button className="btn btn-primary btn-lg mx-2 mb-1">Resolver mi duda ahora</button>
-                    <button className="btn btn-outline-primary btn-lg mx-2 mb-1">Explorar recursos gratuitos</button>
+                <div className="d-flex col-12 flex-row justify-content-center flex-wrap">
+                    <button className="btn btn-primary col-lg-2 col-sm-4 mx-2 mb-1">Resolver mi duda ahora</button>
+                    <button className="btn btn-outline-primary col-lg-2 col-sm-4 mx-2 mb-1">Explorar recursos gratuitos</button>
                 </div>
                 <div className="mt-4">
                     <img
