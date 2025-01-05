@@ -1,5 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-router-dom";
 
 export const HomePage = () => {
     const gradientBackground = {
@@ -14,13 +15,12 @@ export const HomePage = () => {
     return (
         <div className="container-fluid p-0">
             {/* Hero Section */}
-            <header className="text-center py-2 
-       rounded" style={gradientBackground}>
+            <header className="text-center py-2 rounded" style={gradientBackground}>
                 <h1 className="display-4 fs-2 mb-2">¿Tienes dudas? ¡Aquí tienes las respuestas para la PAES!</h1>
                 <p className="lead mb-4">Resuelve tus preguntas de manera rápida y prepara tu futuro con confianza.</p>
                 <div className="d-flex col-12 flex-row justify-content-center flex-wrap">
-                    <button className="btn btn-primary col-lg-2 col-sm-4 mx-2 mb-1">Resolver mi duda ahora</button>
-                    <button className="btn btn-outline-primary col-lg-2 col-sm-4 mx-2 mb-1">Explorar recursos gratuitos</button>
+                    <Link to={"public"} className="btn btn-primary col-lg-2 col-sm-4 mx-2 mb-1">Resolver mi duda ahora</Link>
+                    {/* <Link to={"public"} className="btn btn-outline-primary col-lg-2 col-sm-4 mx-2 mb-1">Explorar recursos gratuitos</Link> */}
                 </div>
                 <div className="mt-4">
                     <img
@@ -73,7 +73,7 @@ export const HomePage = () => {
             <section className="py-5 bg-light rounded">
                 <h2 className="text-center mb-4 fs-5">Por qué elegir Tengo una Duda</h2>
                 <div className="row text-center">
-                    <div className="col-md-3 d-flex flex-column align-items-center">
+                    <div className="col-md-4 d-flex flex-column align-items-center">
                         <div
                             className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
                             style={{ width: "100px", height: "100px" }}
@@ -83,32 +83,32 @@ export const HomePage = () => {
                         <h5>Acceso rápido a expertos</h5>
                         <p>Resuelve tus preguntas en tiempo récord.</p>
                     </div>
-                    <div className="col-md-3 d-flex flex-column align-items-center">
+                    <div className="col-md-4 d-flex flex-column align-items-center">
                         <div
                             className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
                             style={{ width: "100px", height: "100px" }}
                         >
-                            <i class="fa-solid fa-bullseye fs-2 text-black"></i>
+                            <i className="fa-solid fa-bullseye fs-2 text-black"></i>
                         </div>
                         <h5>Enfocado en la PAES</h5>
                         <p>Todo lo que necesitas para preparar la prueba.</p>
                     </div>
-                    <div className="col-md-3 d-flex flex-column align-items-center">
+                    {/* <div className="col-md-3 d-flex flex-column align-items-center">
                         <div
                             className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
                             style={{ width: "100px", height: "100px" }}
                         >
-                            <i class="fa-solid fa-book-open fs-2 text-black"></i>
+                            <i className="fa-solid fa-book-open fs-2 text-black"></i>
                         </div>
                         <h5>Recursos personalizados</h5>
                         <p>Guías, ejercicios y estrategias de estudio.</p>
-                    </div>
-                    <div className="col-md-3 d-flex flex-column align-items-center">
+                    </div> */}
+                    <div className="col-md-4 d-flex flex-column align-items-center">
                         <div
                             className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
                             style={{ width: "100px", height: "100px" }}
                         >
-                            <i class="fa-brands fa-gratipay fs-2 text-black"></i>
+                            <i className="fa-brands fa-gratipay fs-2 text-black"></i>
                         </div>
                         <h5>Gratuito y accesible</h5>
                         <p>¡Sube tu primera duda sin costo y mejora tus resultados!</p>
@@ -118,17 +118,17 @@ export const HomePage = () => {
 
 
             {/* Resources Section */}
-            <section className="py-5 rounded">
+            {/* <section className="py-5 rounded">
                 <h2 className="text-center mb-4">¡Empieza a estudiar hoy mismo!</h2>
                 <div className="text-center">
                     <button className="btn btn-primary btn-lg">Descargar recursos gratuitos</button>
                 </div>
-            </section>
+            </section> */}
 
             {/* Call to Action Section */}
-            <footer className="text-center bg-light py-5">
+            <footer className="text-center  py-5">
                 <h2 className="mb-4">¿Listo para resolver todas tus dudas?</h2>
-                <button className="btn btn-primary btn-lg">Únete Gratis</button>
+                <button className="btn btn-primary btn-lg">Publica tu duda</button>
             </footer>
         </div>
     );
