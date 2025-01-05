@@ -39,18 +39,18 @@ export const PublicPage = () => {
         setMetodo(e.target.value);
     };
 
-    const writeDudaData = async(titulo, duda, email, materia, metodo, recompensa) =>{
+    const writeDudaData = async (titulo, duda, email, materia, metodo, recompensa) => {
         const newDudaRef = push(ref(db, 'dudas')); // Genera un nuevo ID automáticamente
 
         await set(
             newDudaRef, {
-                titulo,
-                duda,
-                email,
-                materia, 
-                metodo, 
-                recompensa
-            }
+            titulo,
+            duda,
+            email,
+            materia,
+            metodo,
+            recompensa
+        }
         );
 
         setpubliced(true);
@@ -81,35 +81,60 @@ export const PublicPage = () => {
     };
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (validateForm()) {
-            writeDudaData(
-                titulo,
-                content,
-                email,
-                materia,
-                metodo,
-                recompensaValue
-            );
+
+            // writeDudaData(
+            //     titulo,
+            //     content,
+            //     email,
+            //     materia,
+            //     metodo,
+            //     recompensaValue
+            // );
+            try {
+                const response = await fetch("http://localhost:3006/webpay_plus/create", {
+                    method: "GET", // Cambia a "POST" si tu backend espera POST
+                    headers: {
+                        "Content-Type": "application/json", // Especifica el tipo de contenido
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.statusText}`);
+                }
+
+                const webpayData = await response.json();
+
+                // Maneja la respuesta JSON
+                console.log("Respuesta de Webpay:", webpayData);
+
+                // Redireccionar o realizar acciones con los datos
+                if (webpayData.url && webpayData.token) {
+                    window.location.href = `${webpayData.url}?token_ws=${webpayData.token}`;
+                }
+            } catch (error) {
+                console.error("Error al enviar la solicitud:", error);
+            }
         }
         console.log(errors);
     };
 
     return (
-        <div className='container-fluid p-0' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
+        <div className='container-fluid p-0 pt-5' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
             <div className='card card-responsive p-4 col-md-10 mx-auto'>
                 <div className="text-center mb-4">
-                    <h1 className="font-bold">Publicar Duda</h1>
+                    <h1 className="font-bold fs-4">Publicar Duda</h1>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <div className="">
-                        {!!errors && <p>{errors.email}</p>} 
-                        {!!errors && <p>{errors.titulo}</p>} 
-                        {!!errors && <p>{errors.content}</p>} 
-                        
+                        {!!errors && <p>{errors.email}</p>}
+                        {!!errors && <p>{errors.titulo}</p>}
+                        {!!errors && <p>{errors.content}</p>}
+
                     </div>
                     <div className="mb-3">
                         <label htmlFor="titulo" className={`form-label ${errors.titulo && "text-danger fw-bolder"}`}>Título</label>
@@ -122,9 +147,9 @@ export const PublicPage = () => {
                             onChange={handleChangeTitulo}
                         />
                     </div>
-                    
+
                     <div className="mb-3">
-                        <label htmlFor="email" className={`form-label ${errors.email && "text-danger fw-bolder"}`}>email</label>
+                        <label htmlFor="email" className={`form-label ${errors.email && "text-danger fw-bolder"}`}>Correo electrónico</label>
                         <input
                             type="text"
                             className="form-control"
@@ -136,50 +161,54 @@ export const PublicPage = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="duda"  className={`form-label ${errors.content && "text-danger fw-bolder"}`}>Duda</label>
+                        <label htmlFor="duda" className={`form-label ${errors.content && "text-danger fw-bolder"}`}>Duda</label>
                         <ReactQuill value={content} onChange={handleChangeContent} />
                     </div>
+                    <div className="d-flex flex-row justify-content-start">
 
-                    <div className="mb-3">
-                        <label htmlFor="subject">Selecciona una materia:</label>
-                        <select
-                            id="subject"
-                            className="form-control"
-                            value={materia}
-                            onChange={handleChangeMateria}
-                        >
-                            <option value="Matemáticas">Matemáticas</option>
-                            <option value="Ciencias">Ciencias</option>
-                            <option value="Finanzas">Finanzas</option>
-                            <option value="Programación">Programación</option>
-                        </select>
-                    </div>
+                        <div className="mb-3 w-75 mr-4">
+                            <label htmlFor="subject">Selecciona una materia:</label>
+                            <select
+                                id="subject"
+                                className="form-control"
+                                value={materia}
+                                onChange={handleChangeMateria}
+                            >
+                                <option value="Matemáticas">Matemáticas</option>
+                                <option value="Ciencias">Ciencias</option>
+                                <option value="Finanzas">Finanzas</option>
+                                <option value="Programación">Programación</option>
+                            </select>
+                        </div>
 
-                    <div className="mb-3">
-                        <p>Método</p>
-                        <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input
-                                type="radio"
-                                className="btn-check"
-                                name="btnradio"
-                                id="btnradio1"
-                                value="Video"
-                                onChange={handleChangeMetodo}
-                                autoComplete="off"
-                                defaultChecked
-                            />
-                            <label className="btn btn-outline-primary" htmlFor="btnradio1">Video</label>
+                        <div className="mb-3 d-flex flex-column">
+                            
+                            <label htmlFor="subject">Método:</label>
+                            
+                            <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="btnradio"
+                                    id="btnradio1"
+                                    value="Video"
+                                    onChange={handleChangeMetodo}
+                                    autoComplete="off"
+                                    defaultChecked
+                                />
+                                <label className="btn btn-outline-primary" htmlFor="btnradio1">Video</label>
 
-                            <input
-                                type="radio"
-                                className="btn-check"
-                                name="btnradio"
-                                id="btnradio2"
-                                value="Escrito"
-                                onChange={handleChangeMetodo}
-                                autoComplete="off"
-                            />
-                            <label className="btn btn-outline-primary" htmlFor="btnradio2">Escrito</label>
+                                <input
+                                    type="radio"
+                                    className="btn-check"
+                                    name="btnradio"
+                                    id="btnradio2"
+                                    value="Escrito"
+                                    onChange={handleChangeMetodo}
+                                    autoComplete="off"
+                                />
+                                <label className="btn btn-outline-primary" htmlFor="btnradio2">Escrito</label>
+                            </div>
                         </div>
                     </div>
 
@@ -195,10 +224,11 @@ export const PublicPage = () => {
                     </div>
 
                     {
-                        publiced 
-                        ? (<form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>)
-                        : (<button type="submit" className="btn btn-primary">Publicar</button>)
-                        
+                        publiced
+                            // ? (<form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>)
+                            ? (<form method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>)
+                            : (<button type="submit" className="btn btn-primary w-100">Publicar</button>)
+
                     }
                 </form>
             </div>
