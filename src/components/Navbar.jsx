@@ -5,14 +5,17 @@ import horizontalLogo from "../assets/horizontalLogo.png";
 export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">
-        <div className="image-container m-0 p-2 ">
-          <img src={horizontalLogo} className="" alt="" />
-        </div>
-      </Link>
+      <div className="col-10">
 
-      
-      <div className="container-fluid">
+        <Link className="navbar-brand" to="/">
+          <div className="image-container m-0 p-2 ">
+            <img src={horizontalLogo} className="" alt="" />
+          </div>
+        </Link>
+
+      </div>
+
+      <div className="container-fluid col-1 m-1">
         <button
           className="navbar-toggler"
           type="button"
@@ -21,7 +24,7 @@ export const Navbar = () => {
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
-        > 
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">

@@ -1,12 +1,11 @@
-// PublicPage.js
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ref, set, push } from "firebase/database";
-import { database as db } from '../firebaseConfig'; // Ajusta la ruta según donde tengas tu firebaseConfig.js
+import { database as db } from '../firebaseConfig';
 import horizontalLogo from "../assets/horizontalLogo.png";
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // importar estilos
-import { formValidation } from '../utils/formValidation'; // Ajusta la ruta según donde tengas tu formValidation.js
+import 'react-quill/dist/quill.snow.css';
+import { formValidation } from '../utils/formValidation';
+import { Modal } from '../components/Modal';
 
 export const PublicPage = () => {
     const [content, setContent] = useState('');
@@ -15,18 +14,24 @@ export const PublicPage = () => {
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('Video');
     const [errors, setErrors] = useState({});
-    const [publiced, setpubliced] = useState(false);
+    const [publiced, setPubliced] = useState(false);
+    const [hasBeensent, setHasBeensent] = useState(true);
+
+    const recompensaValue = 1000;
+
+    const quillRef = useRef(null); // Create ref for ReactQuill
 
 
-    const recompensaValue = 1000; // Valor fijo de la recompensa en CLP
 
     const handleChangeContent = (content) => {
         setContent(content);
+        console.log(content);
     };
 
     const handleChangeMateria = (e) => {
         setMateria(e.target.value);
     };
+
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
     };
@@ -62,7 +67,6 @@ export const PublicPage = () => {
         return isValid;
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -72,7 +76,7 @@ export const PublicPage = () => {
                 const response = await fetch(`http://localhost:3006/webpay_plus/create?titulo=${titulo}&duda=${content}&email=${email}&materia=${materia}&metodo=${metodo}&recompensa=${recompensaValue}`, {
                     method: "GET", // Cambia a "POST" si tu backend espera POST
                     headers: {
-                        "Content-Type": "application/json", // Especifica el tipo de contenido
+                        "Content-Type": "application/json",
                     },
                 });
 
@@ -81,11 +85,8 @@ export const PublicPage = () => {
                 }
 
                 const webpayData = await response.json();
-
-                // Maneja la respuesta JSON
                 console.log("Respuesta de Webpay:", webpayData);
 
-                // Redireccionar o realizar acciones con los datos
                 if (webpayData.url && webpayData.token) {
 
                     window.location.href = `${webpayData.url}?token_ws=${webpayData.token}`;
@@ -96,9 +97,26 @@ export const PublicPage = () => {
         }
         console.log(errors);
     };
+    const modules = {
+        toolbar: [
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ["bold", "italic", "underline", "strike", "blockquote"],
+            [{ align: ["right", "center", "justify"] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image"],
+        ],
+    };
 
     return (
         <div className='container-fluid p-0 pt-5' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
+            <Modal
+                type={"success"}
+                action={""}
+                id="addModal"
+                isOpen={hasBeensent}
+                onClose={()=> console.log("cerrando")}
+                tableName={"Modal"}
+            />
             <div className='card card-responsive p-4 col-md-10 mx-auto'>
                 <div className="text-center mb-4">
                     <h1 className="font-bold fs-4">Publicar Duda</h1>
@@ -109,7 +127,6 @@ export const PublicPage = () => {
                         {!!errors && <p>{errors.email}</p>}
                         {!!errors && <p>{errors.titulo}</p>}
                         {!!errors && <p>{errors.content}</p>}
-
                     </div>
                     <div className="mb-3">
                         <label htmlFor="titulo" className={`form-label ${errors.titulo && "text-danger fw-bolder"}`}>Título</label>
@@ -137,10 +154,15 @@ export const PublicPage = () => {
 
                     <div className="mb-3">
                         <label htmlFor="duda" className={`form-label ${errors.content && "text-danger fw-bolder"}`}>Duda</label>
-                        <ReactQuill value={content} onChange={handleChangeContent} />
+                        <ReactQuill
+                            ref={quillRef}
+                            value={content}
+                            onChange={handleChangeContent}
+                            modules={modules}
+                        />
                     </div>
-                    <div className="d-flex flex-row justify-content-start">
 
+                    <div className="d-flex flex-row justify-content-start">
                         <div className="mb-3 w-75 mr-4">
                             <label htmlFor="subject">Selecciona una materia:</label>
                             <select
@@ -150,16 +172,16 @@ export const PublicPage = () => {
                                 onChange={handleChangeMateria}
                             >
                                 <option value="Matemáticas">Matemáticas</option>
-                                <option value="Ciencias">Ciencias</option>
-                                <option value="Finanzas">Finanzas</option>
-                                <option value="Programación">Programación</option>
+                                <option value="Biología">Biología</option>
+                                <option value="Química">Química</option>
+                                <option value="Física">Física</option>
+                                <option value="Historia">Historia</option>
+                                <option value="Lenguaje">Lenguaje</option>
                             </select>
                         </div>
 
                         <div className="mb-3 d-flex flex-column">
-                            
                             <label htmlFor="subject">Método:</label>
-                            
                             <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
                                 <input
                                     type="radio"
@@ -198,12 +220,13 @@ export const PublicPage = () => {
                         />
                     </div>
 
-                    {
-                        publiced
-                            // ? (<form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>)
-                            ? (<form method='post' action='https://www.webpay.cl/backpub/external/form-pay'><input type='hidden' name='idFormulario' value='197168' /><input type='hidden' name='monto' value='100' /><input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' /></form>)
-                            : (<button type="submit" className="btn btn-primary w-100">Publicar</button>)
-
+                    {publiced
+                        ? (<form method='post' action='https://www.webpay.cl/backpub/external/form-pay'>
+                            <input type='hidden' name='idFormulario' value='197168' />
+                            <input type='hidden' name='monto' value='100' />
+                            <input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' />
+                        </form>)
+                        : (<button type="submit" className="btn btn-primary w-100">Publicar</button>)
                     }
                 </form>
             </div>
