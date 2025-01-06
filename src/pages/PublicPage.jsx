@@ -13,7 +13,7 @@ export const PublicPage = () => {
     const [materia, setMateria] = useState('Matemáticas');
     const [email, setEmail] = useState('');
     const [titulo, setTitulo] = useState('');
-    const [metodo, setMetodo] = useState('');
+    const [metodo, setMetodo] = useState('Video');
     const [errors, setErrors] = useState({});
     const [publiced, setpubliced] = useState(false);
 
@@ -38,24 +38,6 @@ export const PublicPage = () => {
     const handleChangeMetodo = (e) => {
         setMetodo(e.target.value);
     };
-
-    const writeDudaData = async (titulo, duda, email, materia, metodo, recompensa) => {
-        const newDudaRef = push(ref(db, 'dudas')); // Genera un nuevo ID automáticamente
-
-        await set(
-            newDudaRef, {
-            titulo,
-            duda,
-            email,
-            materia,
-            metodo,
-            recompensa
-        }
-        );
-
-        setpubliced(true);
-
-    }
 
     const validateForm = () => {
         let tempErrors = {};
@@ -86,16 +68,8 @@ export const PublicPage = () => {
 
         if (validateForm()) {
 
-            // writeDudaData(
-            //     titulo,
-            //     content,
-            //     email,
-            //     materia,
-            //     metodo,
-            //     recompensaValue
-            // );
             try {
-                const response = await fetch("http://localhost:3006/webpay_plus/create", {
+                const response = await fetch(`http://localhost:3006/webpay_plus/create?titulo=${titulo}&duda=${content}&email=${email}&materia=${materia}&metodo=${metodo}&recompensa=${recompensaValue}`, {
                     method: "GET", // Cambia a "POST" si tu backend espera POST
                     headers: {
                         "Content-Type": "application/json", // Especifica el tipo de contenido
@@ -113,6 +87,7 @@ export const PublicPage = () => {
 
                 // Redireccionar o realizar acciones con los datos
                 if (webpayData.url && webpayData.token) {
+
                     window.location.href = `${webpayData.url}?token_ws=${webpayData.token}`;
                 }
             } catch (error) {
