@@ -16,6 +16,7 @@ export const PublicPage = () => {
     const [errors, setErrors] = useState({});
     const [publiced, setPubliced] = useState(false);
     const [hasBeensent, setHasBeensent] = useState(true);
+    // const [paidToken, setPaidToken] = useState("");
     const [paid, setPaid] = useState(false);
 
     const recompensaValue = 1000;
@@ -96,10 +97,9 @@ export const PublicPage = () => {
 
                 const webpayData = await response.json();
                 console.log("Respuesta de Webpay:", webpayData);
-                console.log("data key:", typeof webpayData.dudaKey);
 
-                if (webpayData.url && webpayData.token && webpayData.dudaKey) {
-
+                if (webpayData.url && webpayData.token) {
+                    
                     window.location.href = `${webpayData.url}?key=${webpayData.dudaKey}&token_ws=${webpayData.token}`;
                 }
             } catch (error) {
@@ -125,7 +125,7 @@ export const PublicPage = () => {
                 action={""}
                 id="addModal"
                 isOpen={hasBeensent}
-                onClose={()=> console.log("cerrando")}
+                onClose={() => console.log("cerrando")}
                 tableName={"Modal"}
             />
             <div className='card card-responsive p-4 col-md-10 mx-auto'>
