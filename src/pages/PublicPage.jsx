@@ -16,6 +16,7 @@ export const PublicPage = () => {
     const [errors, setErrors] = useState({});
     const [publiced, setPubliced] = useState(false);
     const [hasBeensent, setHasBeensent] = useState(true);
+    const [paid, setPaid] = useState(false);
 
     const recompensaValue = 1000;
 
@@ -71,13 +72,22 @@ export const PublicPage = () => {
         e.preventDefault();
 
         if (validateForm()) {
-
+            // TODO: Buscar cómo mandar la imagen al backend. Quizás trabajar con un post y mandarlo en el body http
             try {
-                const response = await fetch(`http://localhost:3006/webpay_plus/create?titulo=${titulo}&duda=${content}&email=${email}&materia=${materia}&metodo=${metodo}&recompensa=${recompensaValue}`, {
-                    method: "GET", // Cambia a "POST" si tu backend espera POST
+                const response = await fetch(`http://localhost:3006/webpay_plus/create`, {
+                    method: "POST", // Cambia a "POST" si tu backend espera POST
                     headers: {
                         "Content-Type": "application/json",
                     },
+                    body: JSON.stringify({ // Construye el JSON con los parámetros
+                        titulo: titulo,
+                        duda: content,
+                        email: email,
+                        materia: materia,
+                        metodo: metodo,
+                        recompensa: recompensaValue,
+                        paid: paid,
+                    }),
                 });
 
                 if (!response.ok) {
@@ -86,10 +96,11 @@ export const PublicPage = () => {
 
                 const webpayData = await response.json();
                 console.log("Respuesta de Webpay:", webpayData);
+                console.log("data key:", typeof webpayData.dudaKey);
 
-                if (webpayData.url && webpayData.token) {
+                if (webpayData.url && webpayData.token && webpayData.dudaKey) {
 
-                    window.location.href = `${webpayData.url}?token_ws=${webpayData.token}`;
+                    window.location.href = `${webpayData.url}?key=${webpayData.dudaKey}&token_ws=${webpayData.token}`;
                 }
             } catch (error) {
                 console.error("Error al enviar la solicitud:", error);
@@ -108,7 +119,7 @@ export const PublicPage = () => {
     };
 
     return (
-        <div className='container-fluid p-0 pt-5' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
+        <div className='container-fluid p-0 pt-3' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
             <Modal
                 type={"success"}
                 action={""}
