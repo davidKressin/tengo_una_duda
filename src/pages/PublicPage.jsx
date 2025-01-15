@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ref, set, push } from "firebase/database";
 import { database as db } from '../firebaseConfig';
 import horizontalLogo from "../assets/horizontalLogo.png";
@@ -6,6 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { formValidation } from '../utils/formValidation';
 import { Modal } from '../components/Modal';
+import { useLocation } from 'react-router-dom';
 
 export const PublicPage = () => {
     const [content, setContent] = useState('');
@@ -15,7 +16,7 @@ export const PublicPage = () => {
     const [metodo, setMetodo] = useState('Video');
     const [errors, setErrors] = useState({});
     const [publiced, setPubliced] = useState(false);
-    const [hasBeensent, setHasBeensent] = useState(true);
+    const [hasBeensent, setHasBeensent] = useState(false);
     // const [paidToken, setPaidToken] = useState("");
     const [paid, setPaid] = useState(false);
 
@@ -23,7 +24,23 @@ export const PublicPage = () => {
 
     const quillRef = useRef(null); // Create ref for ReactQuill
 
+    const location = useLocation();
 
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const enviado = params.get("enviado");
+
+        if (enviado === "true") {
+            console.log("Transacción exitosa");
+            setHasBeensent(true);
+            setPaid(true);
+            // Mostrar un mensaje de éxito al usuario
+        } else if (enviado === "false") {
+            setHasBeensent(true);
+            console.log("Transacción fallida");
+            // Mostrar un mensaje de error al usuario
+        }
+    }, [location]);
 
     const handleChangeContent = (content) => {
         setContent(content);
@@ -73,9 +90,8 @@ export const PublicPage = () => {
         e.preventDefault();
 
         if (validateForm()) {
-            // TODO: Buscar cómo mandar la imagen al backend. Quizás trabajar con un post y mandarlo en el body http
             try {
-                const response = await fetch(`http://localhost:3006/webpay_plus/create`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/webpay_plus/create`, {
                     method: "POST", // Cambia a "POST" si tu backend espera POST
                     headers: {
                         "Content-Type": "application/json",
@@ -108,6 +124,7 @@ export const PublicPage = () => {
         }
         console.log(errors);
     };
+
     const modules = {
         toolbar: [
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -121,7 +138,7 @@ export const PublicPage = () => {
     return (
         <div className='container-fluid p-0 pt-3' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
             <Modal
-                type={"success"}
+                type={!!paid ? "success" : "danger"}
                 action={""}
                 id="addModal"
                 isOpen={hasBeensent}
