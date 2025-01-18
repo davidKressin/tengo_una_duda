@@ -49,7 +49,7 @@ export const Modal = ({ action, content, isOpen, type }) => {
                             : (<div className="modal-body p-5 text-center">
                                 <div className="p-4">
                                     {/* <i className="fa-solid text-success fs-1 fa-paper-plane"></i> */}
-                                    <i class="fa-solid text-danger fs-1 fa-triangle-exclamation"></i>
+                                    <i className="fa-solid text-danger fs-1 fa-triangle-exclamation"></i>
                                 </div>
                                 <h4>Tu duda no ha sido enviada.</h4>
                                 {
@@ -60,9 +60,6 @@ export const Modal = ({ action, content, isOpen, type }) => {
                             </div>)
 
                         }
-
-                        
-
 
                     </div>
                 </div>

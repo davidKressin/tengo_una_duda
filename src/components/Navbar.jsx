@@ -1,21 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import horizontalLogo from "../assets/horizontalLogo.png";
+import horizontalLogo from '../assets/horizontalLogoCut.png';
 
 export const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="col-10">
-
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+      <div className="container">
+        {/* Logo */}
         <Link className="navbar-brand" to="/">
-          <div className="image-container m-0 p-2 ">
-            <img src={horizontalLogo} className="" alt="" />
-          </div>
+          <img
+            src={horizontalLogo}
+            alt="Logo"
+            className="d-inline-block align-middle"
+            style={{ height: '50px' }}
+          />
         </Link>
 
-      </div>
-
-      <div className="container-fluid col-1 m-1">
+        {/* Botón de menú (para dispositivos pequeños) */}
         <button
           className="navbar-toggler"
           type="button"
@@ -27,13 +28,24 @@ export const Navbar = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
+        {/* Enlaces del menú */}
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="home">Inicio</Link>
+              <Link className="nav-link" to="/home">
+                Inicio
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="public">Publicar</Link>
+              <Link className="nav-link" to="/public">
+                Publicar
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/about">
+                Sobre Nosotros
+              </Link>
             </li>
           </ul>
         </div>

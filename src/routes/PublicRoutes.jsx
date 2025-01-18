@@ -2,7 +2,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { PublicPage } from '../pages/PublicPage';
-import { About } from '../pages/About';
+import About from '../pages/About';
 import { HomePage } from '../pages/HomePage';
 
 export const PublicRoutes = () => {

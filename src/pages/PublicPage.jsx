@@ -7,6 +7,8 @@ import 'react-quill/dist/quill.snow.css';
 import { formValidation } from '../utils/formValidation';
 import { Modal } from '../components/Modal';
 import { useLocation } from 'react-router-dom';
+import {paidMode} from "../config/productionMode";
+import { writeDudaData } from '../utils/firebaseUtils';
 
 export const PublicPage = () => {
     const [content, setContent] = useState('');
@@ -20,7 +22,7 @@ export const PublicPage = () => {
     // const [paidToken, setPaidToken] = useState("");
     const [paid, setPaid] = useState(false);
 
-    const recompensaValue = 1000;
+    const recompensaValue = paidMode ? 1000 : 0;
 
     const quillRef = useRef(null); // Create ref for ReactQuill
 
@@ -88,39 +90,59 @@ export const PublicPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const body = {
+            titulo: titulo,
+            duda: content,
+            email: email,
+            materia: materia,
+            metodo: metodo,
+            recompensa: recompensaValue,
+            paid: paid,
+        }
 
         if (validateForm()) {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/webpay_plus/create`, {
-                    method: "POST", // Cambia a "POST" si tu backend espera POST
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ // Construye el JSON con los parámetros
-                        titulo: titulo,
-                        duda: content,
-                        email: email,
-                        materia: materia,
-                        metodo: metodo,
-                        recompensa: recompensaValue,
-                        paid: paid,
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error en la solicitud: ${response.statusText}`);
+            if(paidMode){
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/webpay_plus/create`, {
+                        method: "POST", // Cambia a "POST" si tu backend espera POST
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ // Construye el JSON con los parámetros
+                            titulo: titulo,
+                            duda: content,
+                            email: email,
+                            materia: materia,
+                            metodo: metodo,
+                            recompensa: recompensaValue,
+                            paid: paid,
+                        }),
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error(`Error en la solicitud: ${response.statusText}`);
+                    }
+    
+                    const webpayData = await response.json();
+                    console.log("Respuesta de Webpay:", webpayData);
+    
+                    if (webpayData.url && webpayData.token) {
+                        
+                        window.location.href = `${webpayData.url}?key=${webpayData.dudaKey}&token_ws=${webpayData.token}`;
+                    }
+                } catch (error) {
+                    console.error("Error al enviar la solicitud:", error);
                 }
+            }else{
+                await writeDudaData(body, null);
+                setHasBeensent(true);
 
-                const webpayData = await response.json();
-                console.log("Respuesta de Webpay:", webpayData);
-
-                if (webpayData.url && webpayData.token) {
-                    
-                    window.location.href = `${webpayData.url}?key=${webpayData.dudaKey}&token_ws=${webpayData.token}`;
-                }
-            } catch (error) {
-                console.error("Error al enviar la solicitud:", error);
+                // Después de 5 segundos, se pone hasBeensent en false
+                setTimeout(() => {
+                    setHasBeensent(false);
+                }, 5000); // 5000 milisegundos = 5 segundos
             }
+            
         }
         console.log(errors);
     };
@@ -138,7 +160,7 @@ export const PublicPage = () => {
     return (
         <div className='container-fluid p-0 pt-3' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
             <Modal
-                type={!!paid ? "success" : "danger"}
+                type={!!paid ? "success" : (!paidMode) ? "success" : "danger"} //TODO: otro método válido con gratuidad
                 action={""}
                 id="addModal"
                 isOpen={hasBeensent}
