@@ -10,6 +10,8 @@ import { useLocation } from 'react-router-dom';
 import {paidMode} from "../config/productionMode";
 import { writeDudaData } from '../utils/firebaseUtils';
 
+import {subjects}  from "../db/subjects.json"
+
 export const PublicPage = () => {
     const [content, setContent] = useState('');
     const [materia, setMateria] = useState('Matemáticas');
@@ -221,12 +223,13 @@ export const PublicPage = () => {
                                 value={materia}
                                 onChange={handleChangeMateria}
                             >
-                                <option value="Matemáticas">Matemáticas</option>
+                                {subjects.map(x => <option value={x}>{x}</option>)}
+                                {/* <option value="Matemáticas">Matemáticas</option>
                                 <option value="Biología">Biología</option>
                                 <option value="Química">Química</option>
                                 <option value="Física">Física</option>
                                 <option value="Historia">Historia</option>
-                                <option value="Lenguaje">Lenguaje</option>
+                                <option value="Lenguaje">Lenguaje</option> */}
                             </select>
                         </div>
 

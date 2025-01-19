@@ -1,0 +1,17 @@
+{
+    "tutors": [
+      {
+        "name": "David Kressin González",
+        "subjects": ["Matemáticas", "Física"],
+        "photo": "https://avatar.iran.liara.run/public/41",
+        "experience": "Fundador de Tengo una Duda con más de 2 años de experiencia enseñando matemáticas y física a estudiantes de educación media."
+      },
+      {
+        "name": "Javier Salgado Arias",
+        "subjects": ["Química", "Biología"],
+        "photo": "https://avatar.iran.liara.run/public/42",
+        "experience": "Estudiante de Odontología con una gran pasión por enseñar y más de 3 años ayudando a estudiantes a comprender conceptos complejos de química y biología."
+      }
+    ]
+  }
+  
