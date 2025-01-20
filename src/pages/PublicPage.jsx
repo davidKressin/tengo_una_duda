@@ -15,6 +15,7 @@ import {subjects}  from "../db/subjects.json"
 export const PublicPage = () => {
     const [content, setContent] = useState('');
     const [materia, setMateria] = useState('Matemáticas');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('Video');
@@ -55,6 +56,9 @@ export const PublicPage = () => {
         setMateria(e.target.value);
     };
 
+    const handleChangeName = (e) => {
+        setName(e.target.value);
+    };
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
     };
@@ -73,6 +77,10 @@ export const PublicPage = () => {
 
         if (!formValidation('text', titulo)) {
             tempErrors.titulo = '* El título es requerido';
+            isValid = false;
+        }
+        if (!formValidation('text', name)) {
+            tempErrors.name = '* Tu nombre es requerido';
             isValid = false;
         }
 
@@ -95,12 +103,14 @@ export const PublicPage = () => {
         const body = {
             titulo: titulo,
             duda: content,
+            name: name,
             email: email,
             materia: materia,
             metodo: metodo,
             recompensa: recompensaValue,
             paid: paid,
         }
+        console.log("body", body);
 
         if (validateForm()) {
             if(paidMode){
@@ -113,6 +123,7 @@ export const PublicPage = () => {
                         body: JSON.stringify({ // Construye el JSON con los parámetros
                             titulo: titulo,
                             duda: content,
+                            name: name,
                             email: email,
                             materia: materia,
                             metodo: metodo,
@@ -176,6 +187,7 @@ export const PublicPage = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="">
+                        {!!errors && <p>{errors.name}</p>}
                         {!!errors && <p>{errors.email}</p>}
                         {!!errors && <p>{errors.titulo}</p>}
                         {!!errors && <p>{errors.content}</p>}
@@ -189,6 +201,17 @@ export const PublicPage = () => {
                             placeholder="Ingresa el título de tu duda"
                             value={titulo}
                             onChange={handleChangeTitulo}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="name" className={`form-label ${errors.name && "text-danger fw-bolder"}`}>Nombre</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="name"
+                            placeholder="Ingresa tu nombre"
+                            value={name}
+                            onChange={handleChangeName}
                         />
                     </div>
 

@@ -7,6 +7,7 @@ export const writeDudaData = async (body) => {
     let {
       titulo,
       duda,
+      name,
       email,
       materia,
       metodo,
@@ -16,6 +17,7 @@ export const writeDudaData = async (body) => {
       newDudaRef, {
       titulo,
       duda,
+      name,
       email,
       materia,
       metodo,

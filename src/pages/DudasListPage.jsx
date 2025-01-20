@@ -92,7 +92,7 @@ export const DudasListPage = () => {
                                     <td>{duda.email}</td>
                                     <td>
                                         <Link
-                                            to={`/duda/${duda.id}`}
+                                            to={`/dudas/${duda.id}`}
                                             className="btn btn-primary btn-sm"
                                         >
                                             Ver detalle

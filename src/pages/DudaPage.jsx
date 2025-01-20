@@ -128,7 +128,8 @@ export const DudaPage = () => {
                 <div className="col-md-6 mb-3">
                     <div className="card shadow-sm">
                         <div className="card-body">
-                            <h5 className="card-title">Correo del Estudiante</h5>
+                            <h5 className="card-title">Datos del Estudiante</h5>
+                            <p className="card-text">{dudaData.name}</p>
                             <p className="card-text">{dudaData.email}</p>
                         </div>
                     </div>

@@ -6,16 +6,14 @@ import About from '../pages/About';
 import { HomePage } from '../pages/HomePage';
 import { DudaPage } from '../pages/DudaPage';
 import { DudasListPage } from '../pages/DudasListPage';
-import { LoginTutorPage } from '../pages/LoginTutorPage';
 
-export const PublicRoutes = () => {
+export const TutorRoutes = () => {
   return (
     <Routes>
-      <Route path="*" exact element={<HomePage/>} />
-      <Route path="publish" element={<PublicPage/>} />
-      <Route path="about" element={<About/>} />
-      <Route path="dudas/*" element={<LoginTutorPage/>} />
-      {/* <Route path="duda/:id" element={<DudaPage/>} /> */}
+      <Route path="*" exact element={<DudasListPage/>} />
+      <Route path="dudas" element={<DudasListPage/>} />
+      <Route path="dudas/:id" element={<DudaPage/>} />
+      <Route path=":id" element={<DudaPage/>} />
     </Routes>
   );
 };
