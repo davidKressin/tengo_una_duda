@@ -1,6 +1,6 @@
 // src/components/Routes.js
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { PublicPage } from '../pages/PublicPage';
 import About from '../pages/About';
 import { HomePage } from '../pages/HomePage';
