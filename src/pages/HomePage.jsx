@@ -1,148 +1,124 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
+import { AppLayout } from "../layouts/AppLayout";
 
 export const HomePage = () => {
-    const gradientBackground = {
-        background: "linear-gradient(135deg, #b3e5fc, #e1bee7)",
-        minHeight: "100vh",
-        margin: "0",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-    };
     return (
-        <div className="container-fluid p-0">
-            {/* Hero Section */}
-            <header className="text-center py-2 rounded" style={gradientBackground}>
-                <h1 className="display-4 fs-2 mb-2">¿Tienes dudas? ¡Aquí tienes las respuestas para la PAES!</h1>
-                <p className="lead mb-4">Resuelve tus preguntas de manera rápida y prepara tu futuro con confianza.</p>
-                <div className="d-flex col-12 flex-row justify-content-center flex-wrap">
-                    <Link to={"publish"} className="btn btn-primary col-lg-2 col-sm-4 mx-2 mb-1">Resolver mi duda ahora</Link>
-                    {/* <Link to={"publish"} className="btn btn-outline-primary col-lg-2 col-sm-4 mx-2 mb-1">Explorar recursos gratuitos</Link> */}
-                </div>
-                <div className="mt-4">
-                    <img
-                        // src="https://via.placeholder.com/800x400"
-                        src="https://st2.depositphotos.com/3662505/6878/i/450/depositphotos_68789193-stock-photo-students.jpg"
-                        alt="Estudiantes felices"
-                        className="img-fluid rounded"
-                    />
-                </div>
-            </header>
+        <AppLayout>
+            <div className="container-fluid p-0">
+                {/* Hero Section */}
+                <header className="section-padding position-relative text-center overflow-hidden">
+                    <div className="hero-glow"></div>
+                    <div className="container mt-5">
+                        <div className="row justify-content-center">
+                            <div className="col-lg-10">
+                                <h1 className="display-3 mb-3">
+                                    <span className="text-white">¿Tienes dudas?</span><br />
+                                    <span className="text-gradient">Respuestas reales para la PAES</span>
+                                </h1>
+                                <p className="lead mb-5 text-white opacity-75 mx-auto" style={{ maxWidth: '700px', fontSize: '1.25rem' }}>
+                                    Resuelve tus preguntas de manera rápida con nuestros tutores expertos y prepara tu futuro con total confianza.
+                                </p>
+                                <div className="d-flex justify-content-center gap-3 flex-wrap">
+                                    <Link to="publish" className="btn-premium">
+                                        <i className="fa-regular fa-paper-plane"></i>
+                                        Resolver mi duda ahora
+                                    </Link>
+                                    <Link to="about" className="btn btn-outline-light rounded-pill px-4 fw-600" style={{ border: '1px solid var(--glass-border)' }}>
+                                        Saber más
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-5 pt-4">
+                            <div className="glass-card p-2 mx-auto" style={{ maxWidth: '900px' }}>
+                                <img
+                                    src="https://st2.depositphotos.com/3662505/6878/i/450/depositphotos_68789193-stock-photo-students.jpg"
+                                    alt="Estudiantes exitosos"
+                                    className="img-fluid rounded-4 shadow-lg w-100"
+                                    style={{ objectFit: 'cover', height: '400px' }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </header>
 
-            {/* How It Works Section */}
-            <section className="py-5 text-center ">
-                <h2 className="mb-5 fs-5">Resolver tus dudas nunca fue tan fácil</h2>
-                <div className="row">
-                    <div className="col-md-4 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-regular fa-paper-plane fs-2 text-black"></i>
-                        </div>
-                        <h5>1. Escribe tu duda</h5>
-                        <p>Cuéntanos qué necesitas saber o resolver.</p>
-                    </div>
-                    <div className="col-md-4 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-regular fa-envelope fs-2 text-black"></i>
-                        </div>
-                        <h5>2. Recibe una respuesta</h5>
-                        <p>Nuestros tutores te ayudarán al instante enviandote la respuesta por correo, usando el método que hayas elegido: Video o escrito.</p>
-                    </div>
-                    <div className="col-md-4 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-regular fa-thumbs-up fs-2 text-black"></i>
-                        </div>
-                        <h5>3. Prepárate con confianza</h5>
-                        <p>Obtén claridad y mejora tus resultados en la PAES.</p>
-                    </div>
-                </div>
-            </section>
+                {/* How It Works Section */}
+                <section className="section-padding">
+                    <div className="container text-center">
+                        <h2 className="mb-2 h1">El camino al <span className="text-gradient">éxito</span></h2>
+                        <p className="text-white mb-5">Resolver tus dudas nunca fue tan fácil y rápido</p>
 
-            {/* Benefits Section */}
-            <section className="py-5 bg-light rounded">
-                <h2 className="text-center mb-4 fs-5">Por qué elegir Tengo una Duda</h2>
-                <div className="row text-center">
-                    <div className="col-md-3 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-solid fa-people-group fs-2 text-black"></i>
+                        <div className="row g-4 mt-2">
+                            {[
+                                { icon: "fa-paper-plane", title: "1. Escribe tu duda", desc: "Cuéntanos qué necesitas saber o resolver." },
+                                { icon: "fa-envelope", title: "2. Recibe una respuesta", desc: "Nuestros tutores te enviarán la solución por video o escrito." },
+                                { icon: "fa-thumbs-up", title: "3. Prepárate con confianza", desc: "Obtén claridad y mejora tus resultados en la PAES." }
+                            ].map((step, i) => (
+                                <div className="col-md-4" key={i}>
+                                    <div className="glass-card p-5 h-100 transition-hover">
+                                        <div className="mb-4 d-inline-flex p-4 rounded-circle" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--primary)' }}>
+                                            <i className={`fa-regular ${step.icon} fs-1`}></i>
+                                        </div>
+                                        <h4 className="mb-3 text-white">{step.title}</h4>
+                                        <p className="text-white opacity-75 mb-0">{step.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                        <h5>Acceso rápido a expertos</h5>
-                        <p>Resuelve tus preguntas en tiempo récord.</p>
                     </div>
-                    <div className="col-md-3 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-solid fa-bullseye fs-2 text-black"></i>
-                        </div>
-                        <h5>Enfocado en la PAES</h5>
-                        <p>Todo lo que necesitas para preparar la prueba.</p>
-                    </div>
-                    <div className="col-md-3 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-solid fa-person-rays fs-2 text-black"></i>
-                        </div>
-                        <h5>Personalizado</h5>
-                        <p>Te brindamos exactamente lo que TÚ necesitas,<br/> sin hacerte perder tiempo en lo que ya dominas.</p>
-                    </div>
-                    {/* <div className="col-md-3 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-solid fa-book-open fs-2 text-black"></i>
-                        </div>
-                        <h5>Recursos personalizados</h5>
-                        <p>Guías, ejercicios y estrategias de estudio.</p>
-                    </div> */}
-                    <div className="col-md-3 d-flex flex-column align-items-center">
-                        <div
-                            className="d-flex justify-content-center align-items-center rounded-circle bg-light text-white"
-                            style={{ width: "100px", height: "100px" }}
-                        >
-                            <i className="fa-brands fa-gratipay fs-2 text-black"></i>
-                        </div>
-                        <h5>Gratuito y accesible</h5>
-                        <p>¡Sube tu primera duda sin costo y mejora tus resultados!</p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
+                {/* Benefits Section */}
+                <section className="section-padding" style={{ background: 'rgba(30, 41, 59, 0.4)' }}>
+                    <div className="container">
+                        <div className="text-center mb-5">
+                            <h2 className="h1">Por qué elegir <span className="text-gradient">Tengo una Duda</span></h2>
+                        </div>
+                        <div className="row g-4 text-center">
+                            {[
+                                { icon: "fa-people-group", title: "Acceso rápido", desc: "Expertos listos para ayudarte en tiempo récord." },
+                                { icon: "fa-bullseye", title: "Enfocado en PAES", desc: "Todo el material alineado con las pruebas oficiales." },
+                                { icon: "fa-person-rays", title: "Atención exclusiva", desc: "Resolución personalizada a tu ritmo de estudio." },
+                                { icon: "fa-gratipay", title: "Primera gratis", desc: "Empieza hoy sin costo y comprueba la calidad." }
+                            ].map((benefit, i) => (
+                                <div className="col-md-3" key={i}>
+                                    <div className="p-4 rounded-4 h-100" style={{ background: 'rgba(255, 255, 255, 0.03)' }}>
+                                        <div className="mb-3 text-gradient">
+                                            <i className={`fa-solid ${benefit.icon} fs-2`}></i>
+                                        </div>
+                                        <h5 className="mb-2 text-white">{benefit.title}</h5>
+                                        <p className="text-white opacity-75 small mb-0">{benefit.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
 
-            {/* Resources Section */}
-            {/* <section className="py-5 rounded">
-                <h2 className="text-center mb-4">¡Empieza a estudiar hoy mismo!</h2>
-                <div className="text-center">
-                    <button className="btn btn-primary btn-lg">Descargar recursos gratuitos</button>
-                </div>
-            </section> */}
-
-            {/* Call to Action Section */}
-            <footer className="text-center  py-5">
-                <h2 className="mb-4">¿Listo para resolver todas tus dudas?</h2>
-                <Link to={"publish"} className="btn btn-primary btn-lg">Publica tu duda</Link>
-                <br/>
-                <Link to={"dudas"} className="">Soy Tutor</Link>
-            </footer>
-        </div>
+                {/* Call to Action Section */}
+                <footer className="section-padding text-center">
+                    <div className="container">
+                        <div className="glass-card p-5 py-5 position-relative overflow-hidden">
+                            <div className="position-absolute translate-middle top-0 start-50 w-100 h-100 opacity-10" style={{ background: 'radial-gradient(circle, var(--primary) 0%, transparent 70%)', zIndex: 0 }}></div>
+                            <div className="position-relative" style={{ zIndex: 1 }}>
+                                <h2 className="display-5 mb-4 text-white">¿Listo para mejorar tus puntos?</h2>
+                                <p className="lead mb-5 text-white opacity-75">No dejes que una duda te frene. Consulta ahora mismo.</p>
+                                <div className="d-flex flex-column align-items-center gap-3">
+                                    <Link to="publish" className="btn-premium btn-lg px-5">
+                                        Publicar mi primera duda gratis
+                                    </Link>
+                                    <Link to="dudas" className="text-white opacity-75 text-decoration-none mt-3 hover-opacity-100">
+                                        <i className="fa-solid fa-user-graduate me-2"></i>
+                                        Acceso para Tutores
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </AppLayout>
     );
 };
 

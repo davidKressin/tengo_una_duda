@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebaseConfig"; // Asegúrate de apuntar a tu archivo de configuración Firebase.
-import { get, onValue, query, ref } from "firebase/database";
+import { db } from "../firebaseConfig";
+import { onValue, ref } from "firebase/database";
+import { AppLayout } from "../layouts/AppLayout";
 
 export const DudasListPage = () => {
-    const [dudas, setDudas] = useState([]); // Estado para almacenar las dudas
-    const [loading, setLoading] = useState(true); // Estado para mostrar el indicador de carga
-    const [error, setError] = useState(null); // Estado para errores
+    const [dudas, setDudas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Función para cargar las dudas desde Firestore
     useEffect(() => {
         const fetchDudas = async () => {
             try {
-                const dudasRef = ref(db, "dudas"); // Referencia a la colección "dudas"
-
-                // Escucha los cambios en la colección
+                const dudasRef = ref(db, "dudas");
                 onValue(dudasRef, (snapshot) => {
                     const data = snapshot.val();
                     if (data) {
-                        // Convierte los datos en un array de objetos
                         const dudasArray = Object.keys(data).map((key) => ({
-                            id: key, // Agrega el ID (clave de Firebase)
-                            ...data[key], // Propiedades del documento
+                            id: key,
+                            ...data[key],
                         }));
                         setDudas(dudasArray);
                     } else {
-                        setDudas([]); // Si no hay datos, establece dudas como un array vacío
+                        setDudas([]);
                     }
                     setLoading(false);
                 });
@@ -37,73 +32,93 @@ export const DudasListPage = () => {
                 setLoading(false);
             }
         };
-
         fetchDudas();
     }, []);
 
-    // Mostrar un indicador de carga mientras se obtienen los datos
     if (loading) {
         return (
-            <div className="container text-center mt-5">
-                <h3>Cargando dudas...</h3>
-            </div>
-        );
-    }
-
-    // Mostrar un mensaje de error si ocurre algo
-    if (error) {
-        return (
-            <div className="container text-center mt-5">
-                <h3>{error}</h3>
-            </div>
+            <AppLayout>
+                <div className="section-padding text-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </AppLayout>
         );
     }
 
     return (
-        <div className="container mt-5">
-            {/* Título */}
-            <div className="row mb-4">
-                <div className="col text-center">
-                    <h1 className="">Listado de Dudas</h1>
-                </div>
-            </div>
+        <AppLayout>
+            <div className="section-padding min-vh-100 position-relative overflow-hidden">
+                <div className="hero-glow"></div>
+                <div className="container mt-5">
+                    <div className="row mb-5 align-items-center">
+                        <div className="col-md-8">
+                            <h1 className="display-5 fw-bold text-white mb-2">Panel de Control <span className="text-gradient">Dudas</span></h1>
+                            <p className="text-white">Gestiona y responde las consultas de los estudiantes.</p>
+                        </div>
+                    </div>
 
-            {/* Tabla con las dudas */}
-            <div className="row">
-                <div className="col">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Título</th>
-                                <th scope="col">Materia</th>
-                                <th scope="col">Método</th>
-                                <th scope="col">Recompensa</th>
-                                <th scope="col">Correo</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {dudas.map((duda) => (
-                                <tr key={duda.id}>
-                                    <td>{duda.titulo}</td>
-                                    <td>{duda.materia}</td>
-                                    <td>{duda.metodo}</td>
-                                    <td>{duda.recompensa}</td>
-                                    <td>{duda.email}</td>
-                                    <td>
-                                        <Link
-                                            to={`/dudas/${duda.id}`}
-                                            className="btn btn-primary btn-sm"
-                                        >
-                                            Ver detalle
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <div className="glass-card overflow-hidden">
+                        <div className="table-responsive">
+                            <table className="table table-dark table-hover mb-0">
+                                <thead className="bg-surface">
+                                    <tr>
+                                        <th className="px-4 py-3 border-0">Estudiante / ID</th>
+                                        <th className="py-3 border-0">Título</th>
+                                        <th className="py-3 border-0">Materia / Método</th>
+                                        <th className="py-3 border-0">Recompensa</th>
+                                        <th className="px-4 py-3 border-0 text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {dudas.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="text-center py-5 text-white">No hay dudas publicadas aún.</td>
+                                        </tr>
+                                    ) : (
+                                        dudas.map((duda) => (
+                                            <tr key={duda.id} className="align-middle">
+                                                <td className="px-4 py-3 border-bottom border-light border-opacity-10">
+                                                    <div className="d-flex flex-column">
+                                                        <span className="fw-bold text-white">{duda.name || "Anónimo"}</span>
+                                                        <span className="small text-white">{duda.email}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 border-bottom border-light border-opacity-10">
+                                                    <span className="text-white">{duda.titulo}</span>
+                                                </td>
+                                                <td className="py-3 border-bottom border-light border-opacity-10">
+                                                    <div className="d-flex flex-column">
+                                                        <span className="badge bg-primary bg-opacity-10 text-primary w-fit mb-1" style={{ width: 'fit-content' }}>{duda.materia}</span>
+                                                        <small className="text-white">
+                                                            <i className={`fa-solid ${duda.metodo === 'Video' ? 'fa-video' : 'fa-pen'} me-1`}></i>
+                                                            {duda.metodo}
+                                                        </small>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 border-bottom border-light border-opacity-10">
+                                                    <span className="fw-bold text-secondary">
+                                                        {duda.recompensa > 0 ? `$${duda.recompensa.toLocaleString()}` : "Gratis"}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 border-bottom border-light border-opacity-10 text-end">
+                                                    <Link
+                                                        to={`/dudas/${duda.id}`}
+                                                        className="btn btn-outline-light btn-sm rounded-pill px-3"
+                                                    >
+                                                        Responder <i className="fa-solid fa-chevron-right ms-1"></i>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </AppLayout>
     );
 };

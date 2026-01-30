@@ -4,47 +4,49 @@ import horizontalLogo from '../assets/horizontalLogoCut.png';
 
 export const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-      <div className="container">
+    <nav className="nav-glass navbar navbar-expand-lg">
+      <div className="container-fluid">
         {/* Logo */}
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand d-flex align-items-center" to="/">
           <img
             src={horizontalLogo}
             alt="Logo"
-            className="d-inline-block align-middle"
-            style={{ height: '50px' }}
+            className="d-inline-block align-middle filter-light"
+            style={{ height: '40px' }}
           />
+          <span className="ms-2 fw-bold text-white d-none d-sm-inline">Tengo una Duda</span>
         </Link>
 
-        {/* Botón de menú (para dispositivos pequeños) */}
+        {/* Botón de menú */}
         <button
-          className="navbar-toggler"
+          className="navbar-toggler border-0"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          style={{ filter: 'invert(1)' }}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
         {/* Enlaces del menú */}
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
+          <ul className="navbar-nav ms-auto align-items-center">
+            <li className="nav-item mx-2">
+              <Link className="nav-link text-white opacity-75 hover-opacity-100" to="/">
                 Inicio
               </Link>
             </li>
-            <li className="nav-item fw-bold">
-              <Link className="nav-link" to="publish">
-                Resolver Duda
+            <li className="nav-item mx-2">
+              <Link className="nav-link text-white opacity-75 hover-opacity-100" to="about">
+                Nosotros
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="about">
-                Sobre Nosotros
+            <li className="nav-item ms-lg-3">
+              <Link className="btn-premium" to="publish" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
+                Resolver Duda
               </Link>
             </li>
           </ul>

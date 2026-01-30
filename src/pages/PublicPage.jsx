@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ref, set, push } from "firebase/database";
 import { database as db } from '../firebaseConfig';
-import horizontalLogo from "../assets/horizontalLogo.png";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { formValidation } from '../utils/formValidation';
 import { Modal } from '../components/Modal';
 import { useLocation } from 'react-router-dom';
-import {paidMode} from "../config/productionMode";
+import { paidMode } from "../config/productionMode";
 import { writeDudaData } from '../utils/firebaseUtils';
-
-import {subjects}  from "../db/subjects.json"
+import { subjects } from "../db/subjects.json";
+import { AppLayout } from '../layouts/AppLayout';
 
 export const PublicPage = () => {
     const [content, setContent] = useState('');
@@ -20,292 +19,207 @@ export const PublicPage = () => {
     const [titulo, setTitulo] = useState('');
     const [metodo, setMetodo] = useState('Video');
     const [errors, setErrors] = useState({});
-    const [publiced, setPubliced] = useState(false);
     const [hasBeensent, setHasBeensent] = useState(false);
-    // const [paidToken, setPaidToken] = useState("");
     const [paid, setPaid] = useState(false);
 
     const recompensaValue = paidMode ? 1000 : 0;
-
-    const quillRef = useRef(null); // Create ref for ReactQuill
-
+    const quillRef = useRef(null);
     const location = useLocation();
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const enviado = params.get("enviado");
-
         if (enviado === "true") {
-            console.log("Transacción exitosa");
             setHasBeensent(true);
             setPaid(true);
-            // Mostrar un mensaje de éxito al usuario
         } else if (enviado === "false") {
             setHasBeensent(true);
-            console.log("Transacción fallida");
-            // Mostrar un mensaje de error al usuario
         }
     }, [location]);
 
-    const handleChangeContent = (content) => {
-        setContent(content);
-        console.log(content);
-    };
-
-    const handleChangeMateria = (e) => {
-        setMateria(e.target.value);
-    };
-
-    const handleChangeName = (e) => {
-        setName(e.target.value);
-    };
-    const handleChangeEmail = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const handleChangeTitulo = (e) => {
-        setTitulo(e.target.value);
-    };
-
-    const handleChangeMetodo = (e) => {
-        setMetodo(e.target.value);
-    };
+    const handleChangeContent = (content) => setContent(content);
+    const handleChangeMateria = (e) => setMateria(e.target.value);
+    const handleChangeName = (e) => setName(e.target.value);
+    const handleChangeEmail = (e) => setEmail(e.target.value);
+    const handleChangeTitulo = (e) => setTitulo(e.target.value);
+    const handleChangeMetodo = (e) => setMetodo(e.target.value);
 
     const validateForm = () => {
         let tempErrors = {};
         let isValid = true;
-
-        if (!formValidation('text', titulo)) {
-            tempErrors.titulo = '* El título es requerido';
-            isValid = false;
-        }
-        if (!formValidation('text', name)) {
-            tempErrors.name = '* Tu nombre es requerido';
-            isValid = false;
-        }
-
-        if (!formValidation('email', email)) {
-            tempErrors.email = '* El email no es válido';
-            isValid = false;
-        }
-
-        if (!formValidation('text', content)) {
-            tempErrors.content = '* El contenido de la duda es requerido';
-            isValid = false;
-        }
-
+        if (!formValidation('text', titulo)) { tempErrors.titulo = '* El título es requerido'; isValid = false; }
+        if (!formValidation('text', name)) { tempErrors.name = '* Tu nombre es requerido'; isValid = false; }
+        if (!formValidation('email', email)) { tempErrors.email = '* El email no es válido'; isValid = false; }
+        if (!formValidation('text', content)) { tempErrors.content = '* El contenido es requerido'; isValid = false; }
         setErrors(tempErrors);
         return isValid;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const body = {
-            titulo: titulo,
-            duda: content,
-            name: name,
-            email: email,
-            materia: materia,
-            metodo: metodo,
-            recompensa: recompensaValue,
-            paid: paid,
-        }
-        console.log("body", body);
-
+        const body = { titulo, duda: content, name, email, materia, metodo, recompensa: recompensaValue, paid };
         if (validateForm()) {
-            if(paidMode){
+            if (paidMode) {
                 try {
                     const response = await fetch(`${import.meta.env.VITE_API_URL}/webpay_plus/create`, {
-                        method: "POST", // Cambia a "POST" si tu backend espera POST
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ // Construye el JSON con los parámetros
-                            titulo: titulo,
-                            duda: content,
-                            name: name,
-                            email: email,
-                            materia: materia,
-                            metodo: metodo,
-                            recompensa: recompensaValue,
-                            paid: paid,
-                        }),
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(body),
                     });
-    
-                    if (!response.ok) {
-                        throw new Error(`Error en la solicitud: ${response.statusText}`);
-                    }
-    
                     const webpayData = await response.json();
-                    console.log("Respuesta de Webpay:", webpayData);
-    
                     if (webpayData.url && webpayData.token) {
-                        
                         window.location.href = `${webpayData.url}?key=${webpayData.dudaKey}&token_ws=${webpayData.token}`;
                     }
-                } catch (error) {
-                    console.error("Error al enviar la solicitud:", error);
-                }
-            }else{
+                } catch (error) { console.error("Error:", error); }
+            } else {
                 await writeDudaData(body, null);
                 setHasBeensent(true);
-
-                // Después de 5 segundos, se pone hasBeensent en false
-                setTimeout(() => {
-                    setHasBeensent(false);
-                }, 5000); // 5000 milisegundos = 5 segundos
+                setTimeout(() => setHasBeensent(false), 5000);
             }
-            
         }
-        console.log(errors);
     };
 
     const modules = {
         toolbar: [
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["bold", "italic", "underline", "strike", "blockquote"],
-            [{ align: ["right", "center", "justify"] }],
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline"],
             [{ list: "ordered" }, { list: "bullet" }],
-            ["link", "image"],
+            ["image"],
         ],
     };
 
     return (
-        <div className='container-fluid p-0 pt-3' style={{ "background": "#CCCCCC", "minHeight": "100vh" }}>
-            <Modal
-                type={!!paid ? "success" : (!paidMode) ? "success" : "danger"} //TODO: otro método válido con gratuidad
-                action={""}
-                id="addModal"
-                isOpen={hasBeensent}
-                onClose={() => console.log("cerrando")}
-                tableName={"Modal"}
-            />
-            <div className='card card-responsive p-4 col-md-10 mx-auto'>
-                <div className="text-center mb-4">
-                    <h1 className="font-bold fs-4">Publicar Duda</h1>
-                </div>
+        <AppLayout>
+            <div className='section-padding min-vh-100 position-relative overflow-hidden'>
+                <div className="hero-glow"></div>
+                <Modal
+                    type={paid || !paidMode ? "success" : "danger"}
+                    action={""}
+                    id="addModal"
+                    isOpen={hasBeensent}
+                    onClose={() => setHasBeensent(false)}
+                    tableName={"Modal"}
+                />
 
-                <form onSubmit={handleSubmit}>
-                    <div className="">
-                        {!!errors && <p>{errors.name}</p>}
-                        {!!errors && <p>{errors.email}</p>}
-                        {!!errors && <p>{errors.titulo}</p>}
-                        {!!errors && <p>{errors.content}</p>}
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="titulo" className={`form-label ${errors.titulo && "text-danger fw-bolder"}`}>Título</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="titulo"
-                            placeholder="Ingresa el título de tu duda"
-                            value={titulo}
-                            onChange={handleChangeTitulo}
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="name" className={`form-label ${errors.name && "text-danger fw-bolder"}`}>Nombre</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="name"
-                            placeholder="Ingresa tu nombre"
-                            value={name}
-                            onChange={handleChangeName}
-                        />
-                    </div>
+                <div className="container mt-5">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-8">
+                            <div className="glass-card p-4 p-md-5">
+                                <div className="text-center mb-5">
+                                    <h2 className="display-6 fw-bold text-gradient">Publicar mi duda</h2>
+                                    <p className="text-white">Completa los datos para que un tutor pueda ayudarte.</p>
+                                </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="email" className={`form-label ${errors.email && "text-danger fw-bolder"}`}>Correo electrónico</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="email"
-                            placeholder="Ingresa tu email"
-                            value={email}
-                            onChange={handleChangeEmail}
-                        />
-                    </div>
+                                <form onSubmit={handleSubmit} className="row g-4">
+                                    <div className="col-12">
+                                        <label className={`form-label fw-600 ${errors.titulo ? "text-accent" : "text-white"}`}>
+                                            Título de la duda {errors.titulo && <span className="small ms-2">({errors.titulo})</span>}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-dark border-secondary text-white p-3 rounded-3"
+                                            style={{ backgroundColor: 'rgba(15, 23, 42, 0.6) !important' }}
+                                            placeholder="Ej: Duda con logaritmos en base 10"
+                                            value={titulo}
+                                            onChange={handleChangeTitulo}
+                                        />
+                                    </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="duda" className={`form-label ${errors.content && "text-danger fw-bolder"}`}>Duda</label>
-                        <ReactQuill
-                            ref={quillRef}
-                            value={content}
-                            onChange={handleChangeContent}
-                            modules={modules}
-                        />
-                    </div>
+                                    <div className="col-md-6">
+                                        <label className={`form-label fw-600 ${errors.name ? "text-accent" : "text-white"}`}>
+                                            Tu Nombre {errors.name && <span className="small ms-2">({errors.name})</span>}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-dark border-secondary text-white p-3 rounded-3"
+                                            placeholder="Ingresa tu nombre"
+                                            value={name}
+                                            onChange={handleChangeName}
+                                        />
+                                    </div>
 
-                    <div className="d-flex flex-row justify-content-start">
-                        <div className="mb-3 w-75 mr-4">
-                            <label htmlFor="subject">Selecciona una materia:</label>
-                            <select
-                                id="subject"
-                                className="form-control"
-                                value={materia}
-                                onChange={handleChangeMateria}
-                            >
-                                {subjects.map(x => <option value={x}>{x}</option>)}
-                                {/* <option value="Matemáticas">Matemáticas</option>
-                                <option value="Biología">Biología</option>
-                                <option value="Química">Química</option>
-                                <option value="Física">Física</option>
-                                <option value="Historia">Historia</option>
-                                <option value="Lenguaje">Lenguaje</option> */}
-                            </select>
-                        </div>
+                                    <div className="col-md-6">
+                                        <label className={`form-label fw-600 ${errors.email ? "text-accent" : "text-white"}`}>
+                                            Email {errors.email && <span className="small ms-2">({errors.email})</span>}
+                                        </label>
+                                        <input
+                                            type="email"
+                                            className="form-control bg-dark border-secondary text-white p-3 rounded-3"
+                                            placeholder="correo@ejemplo.com"
+                                            value={email}
+                                            onChange={handleChangeEmail}
+                                        />
+                                    </div>
 
-                        <div className="mb-3 d-flex flex-column">
-                            <label htmlFor="subject">Método:</label>
-                            <div className="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="btnradio"
-                                    id="btnradio1"
-                                    value="Video"
-                                    onChange={handleChangeMetodo}
-                                    autoComplete="off"
-                                    defaultChecked
-                                />
-                                <label className="btn btn-outline-primary" htmlFor="btnradio1">Video</label>
+                                    <div className="col-12">
+                                        <label className={`form-label fw-600 ${errors.content ? "text-accent" : "text-white"}`}>
+                                            Explica tu duda {errors.content && <span className="small ms-2">({errors.content})</span>}
+                                        </label>
+                                        <div className="bg-white rounded-3 overflow-hidden text-dark">
+                                            <ReactQuill
+                                                ref={quillRef}
+                                                value={content}
+                                                onChange={handleChangeContent}
+                                                modules={modules}
+                                                theme="snow"
+                                            />
+                                        </div>
+                                    </div>
 
-                                <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="btnradio"
-                                    id="btnradio2"
-                                    value="Escrito"
-                                    onChange={handleChangeMetodo}
-                                    autoComplete="off"
-                                />
-                                <label className="btn btn-outline-primary" htmlFor="btnradio2">Escrito</label>
+                                    <div className="col-md-7">
+                                        <label className="form-label fw-600 text-white">Materia</label>
+                                        <select
+                                            className="form-select bg-dark border-secondary text-white p-3 rounded-3"
+                                            value={materia}
+                                            onChange={handleChangeMateria}
+                                        >
+                                            {subjects.map(x => <option key={x} value={x}>{x}</option>)}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-md-5">
+                                        <label className="form-label fw-600 text-white">Método de respuesta</label>
+                                        <div className="d-flex gap-2">
+                                            <button
+                                                type="button"
+                                                className={`btn flex-grow-1 p-3 rounded-3 ${metodo === 'Video' ? 'btn-primary' : 'btn-outline-secondary text-white'}`}
+                                                onClick={() => setMetodo('Video')}
+                                            >
+                                                <i className="fa-solid fa-video me-2"></i> Video
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`btn flex-grow-1 p-3 rounded-3 ${metodo === 'Escrito' ? 'btn-primary' : 'btn-outline-secondary text-white'}`}
+                                                onClick={() => setMetodo('Escrito')}
+                                            >
+                                                <i className="fa-solid fa-pen-nib me-2"></i> Escrito
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <div className="p-3 rounded-3" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px dashed var(--glass-border)' }}>
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <span className="text-white">Costo del servicio:</span>
+                                                <span className="fw-bold fs-5 text-white">
+                                                    {recompensaValue === 0 ? "¡GRATIS!" : recompensaValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12 mt-4">
+                                        <button type="submit" className="btn-premium w-100 py-3 fs-5 shadow-lg">
+                                            <i className="fa-solid fa-cloud-arrow-up"></i>
+                                            Publicar Duda Ahora
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-
-                    <div className="mb-3">
-                        <label htmlFor="coins" className="form-label">Recompensa:</label>
-                        <input
-                            id="coins"
-                            type="text"
-                            className="form-control"
-                            value={recompensaValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}
-                            readOnly
-                        />
-                    </div>
-
-                    {publiced
-                        ? (<form method='post' action='https://www.webpay.cl/backpub/external/form-pay'>
-                            <input type='hidden' name='idFormulario' value='197168' />
-                            <input type='hidden' name='monto' value='100' />
-                            <input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' />
-                        </form>)
-                        : (<button type="submit" className="btn btn-primary w-100">Publicar</button>)
-                    }
-                </form>
+                </div>
             </div>
-        </div>
+        </AppLayout>
     );
 };
