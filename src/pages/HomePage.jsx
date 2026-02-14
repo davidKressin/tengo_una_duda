@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AppLayout } from "../layouts/AppLayout";
 
+import { ValueProposition } from "../components/ValueProposition";
+
 export const HomePage = () => {
     return (
         <AppLayout>
@@ -42,7 +44,8 @@ export const HomePage = () => {
                         </div>
                     </div>
                 </header>
-
+                {/* Value Proposition Section */}
+                <ValueProposition />
                 {/* How It Works Section */}
                 <section className="section-padding">
                     <div className="container text-center">
@@ -68,6 +71,8 @@ export const HomePage = () => {
                         </div>
                     </div>
                 </section>
+
+
 
                 {/* Benefits Section */}
                 <section className="section-padding" style={{ background: 'rgba(30, 41, 59, 0.4)' }}>
