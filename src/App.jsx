@@ -3,9 +3,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { PublicRoutes } from './routes/PublicRoutes';
 import { AppLayout } from './layouts/AppLayout';
 
+import { AuthProvider } from './context/AuthContext';
+
 function App() {
   return (
-    <PublicRoutes />
+    <AuthProvider>
+      <PublicRoutes />
+    </AuthProvider>
   )
 }
 

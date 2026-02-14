@@ -1,0 +1,192 @@
+[
+    {
+        "id": 1,
+        "nombre": "Ingeniería Civil Informática",
+        "area": "Ingeniería",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 820
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 815
+            },
+            {
+                "nombre": "Universidad Técnica Federico Santa María",
+                "puntaje_corte": 805
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "nombre": "Medicina",
+        "area": "Salud",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 960
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 955
+            },
+            {
+                "nombre": "Universidad San Sebastián",
+                "puntaje_corte": 910
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "nombre": "Derecho",
+        "area": "Ciencias Sociales y Jurídicas",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 850
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 845
+            },
+            {
+                "nombre": "Universidad Diego Portales",
+                "puntaje_corte": 780
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "nombre": "Psicología",
+        "area": "Ciencias Sociales",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 810
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 805
+            },
+            {
+                "nombre": "Universidad Adolfo Ibáñez",
+                "puntaje_corte": 760
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "nombre": "Arquitectura",
+        "area": "Arte y Arquitectura",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 830
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 825
+            },
+            {
+                "nombre": "Universidad Finis Terrae",
+                "puntaje_corte": 740
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "nombre": "Enfermería",
+        "area": "Salud",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 800
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 795
+            },
+            {
+                "nombre": "Universidad Andrés Bello",
+                "puntaje_corte": 720
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "nombre": "Ingeniería Comercial",
+        "area": "Economía y Negocios",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 840
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 835
+            },
+            {
+                "nombre": "Universidad Adolfo Ibáñez",
+                "puntaje_corte": 800
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "nombre": "Kinesiología",
+        "area": "Salud",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 780
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 775
+            },
+            {
+                "nombre": "Universidad Andrés Bello",
+                "puntaje_corte": 700
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "nombre": "Pedagogía en Educación Básica",
+        "area": "Educación",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 700
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 695
+            },
+            {
+                "nombre": "Universidad Diego Portales",
+                "puntaje_corte": 650
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "nombre": "Periodismo",
+        "area": "Comunicaciones",
+        "universidades": [
+            {
+                "nombre": "Pontificia Universidad Católica de Chile",
+                "puntaje_corte": 750
+            },
+            {
+                "nombre": "Universidad de Chile",
+                "puntaje_corte": 745
+            },
+            {
+                "nombre": "Universidad Diego Portales",
+                "puntaje_corte": 700
+            }
+        ]
+    }
+]

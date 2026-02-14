@@ -38,7 +38,7 @@ export const DudasListPage = () => {
     if (loading) {
         return (
             <AppLayout>
-                <div className="section-padding text-center">
+                <div className="section-padding text-center mt-5">
                     <div className="spinner-border text-primary" role="status">
                         <span className="visually-hidden">Cargando...</span>
                     </div>

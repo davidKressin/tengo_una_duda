@@ -8,9 +8,7 @@ import { AppLayout } from './layouts/AppLayout.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AppLayout>
-        <App />
-      </AppLayout>
+      <App />
     </BrowserRouter>
   </React.StrictMode>,
 )

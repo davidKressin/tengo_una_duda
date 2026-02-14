@@ -1,22 +1,34 @@
 import React, { useState } from 'react';
 import { TutorRoutes } from '../routes/TutorRoutes';
 import { AppLayout } from '../layouts/AppLayout';
+import { useAuth } from '../context/AuthContext';
 
 export const LoginTutorPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [logged, setLogged] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { login, currentUser } = useAuth();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin') {
-      setLogged(true);
-    } else {
-      alert('Usuario o contraseña incorrectos.');
+    setError('');
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      // Logic for tutor status could be added here (e.g., check role in Firestore)
+    } catch (err) {
+      console.error(err);
+      setError('Credenciales incorrectas o error en el servidor.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (logged) return <TutorRoutes />;
+  // If user is already logged in, show TutorRoutes
+  // Note: For a more robust solution, we should verify if the user is actually a tutor
+  if (currentUser) return <TutorRoutes />;
 
   return (
     <AppLayout>
@@ -34,19 +46,26 @@ export const LoginTutorPage = () => {
                   <p className="text-white">Ingresa tus credenciales para continuar</p>
                 </div>
 
+                {error && (
+                  <div className="alert alert-danger mb-4">
+                    {error}
+                  </div>
+                )}
+
                 <form onSubmit={handleLogin} className="row g-4">
                   <div className="col-12">
-                    <label className="form-label text-white fw-600">Usuario</label>
+                    <label className="form-label text-white fw-600">Correo Electrónico</label>
                     <div className="position-relative">
                       <span className="position-absolute top-50 start-0 translate-middle-y ms-3 text-white">
-                        <i className="fa-solid fa-user"></i>
+                        <i className="fa-solid fa-envelope"></i>
                       </span>
                       <input
-                        type="text"
+                        type="email"
                         className="form-control bg-dark border-secondary text-white p-3 ps-5 rounded-3"
-                        placeholder="admin"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="tutor@ejemplo.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                       />
                     </div>
                   </div>
@@ -63,13 +82,18 @@ export const LoginTutorPage = () => {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                       />
                     </div>
                   </div>
 
                   <div className="col-12 mt-5">
-                    <button type="submit" className="btn-premium w-100 py-3 fs-5 shadow-lg">
-                      Iniciar Sesión
+                    <button
+                      type="submit"
+                      className="btn-premium w-100 py-3 fs-5 shadow-lg"
+                      disabled={loading}
+                    >
+                      {loading ? 'Cargando...' : 'Iniciar Sesión'}
                     </button>
                   </div>
                 </form>

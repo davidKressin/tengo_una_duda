@@ -40,12 +40,35 @@ export const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item mx-2">
-              <Link className="nav-link text-white opacity-75 hover-opacity-100" to="about">
+              <Link className="nav-link text-white opacity-75 hover-opacity-100" to="/about">
                 Nosotros
               </Link>
             </li>
+            <li className="nav-item mx-2">
+              {localStorage.getItem('studentEmail') ? (
+                <div className="d-flex align-items-center gap-3">
+                  <Link className="nav-link text-white opacity-75 hover-opacity-100" to="/my-plan">
+                    <i className="fa-solid fa-calendar-day me-1"></i>
+                    Mi Plan
+                  </Link>
+                  <Link className="nav-link text-white opacity-75 hover-opacity-100" to="/profile">
+                    <i className="fa-regular fa-user-circle me-1"></i>
+                    Mi Perfil
+                  </Link>
+                </div>
+              ) : (
+                <div className="d-flex align-items-center gap-3">
+                  <Link className="nav-link text-white opacity-75 hover-opacity-100" to="/login-student">
+                    Ingresar
+                  </Link>
+                  <Link className="btn btn-outline-light btn-sm rounded-pill px-3" to="/login-student?mode=signup">
+                    Crear Cuenta
+                  </Link>
+                </div>
+              )}
+            </li>
             <li className="nav-item ms-lg-3">
-              <Link className="btn-premium" to="publish" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
+              <Link className="btn-premium" to="/publish" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
                 Resolver Duda
               </Link>
             </li>

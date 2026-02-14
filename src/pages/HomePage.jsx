@@ -20,12 +20,12 @@ export const HomePage = () => {
                                     Resuelve tus preguntas de manera rápida con nuestros tutores expertos y prepara tu futuro con total confianza.
                                 </p>
                                 <div className="d-flex justify-content-center gap-3 flex-wrap">
-                                    <Link to="publish" className="btn-premium">
-                                        <i className="fa-regular fa-paper-plane"></i>
-                                        Resolver mi duda ahora
+                                    <Link to="login-student?mode=signup" className="btn-premium">
+                                        <i className="fa-solid fa-user-plus me-2"></i>
+                                        Crear mi cuenta gratis
                                     </Link>
-                                    <Link to="about" className="btn btn-outline-light rounded-pill px-4 fw-600" style={{ border: '1px solid var(--glass-border)' }}>
-                                        Saber más
+                                    <Link to="publish" className="btn btn-outline-light rounded-pill px-4 fw-600" style={{ border: '1px solid var(--glass-border)' }}>
+                                        Resolver duda ahora
                                     </Link>
                                 </div>
                             </div>
